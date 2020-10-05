@@ -1,0 +1,74 @@
+package Controlador;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
+import modelo.Alumno;
+import modelo.Curso;
+import modelo.Modulo;
+
+public class Controlador {
+
+	static EntityManagerFactory emf = Persistence.createEntityManagerFactory("Academia");
+
+	public static Curso listadoAlumnos(int i) {
+		EntityManager em = emf.createEntityManager();
+		String consulta = "from Curso a where a.codigo = :curs";
+		Query query = em.createQuery(consulta);
+		query.setParameter("curs", i);
+		Curso cursi = (Curso) query.getSingleResult();
+
+		em.close();
+		return cursi;
+	}
+
+	public static List<Alumno> pasaCurso() {
+		// TODO Auto-generated method stub
+		EntityManager em = emf.createEntityManager();
+		String consulta = "from Alumno a";
+		List<Alumno> alumnos = null;
+
+		try {
+			Query query = em.createQuery(consulta);
+			alumnos = query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			em.close();
+		}
+		return alumnos;
+	}
+
+	public static List<Alumno> isDelegado() {
+		// TODO Auto-generated method stub
+		EntityManager em = emf.createEntityManager();
+		String consulta = "from Alumno a where a.delegado = true";
+		Query query = em.createQuery(consulta);
+		List<Alumno> alum = query.getResultList();
+
+		em.close();
+		return alum;
+	}
+
+	public static Modulo buscarModulo(int i) {
+		// TODO Auto-generated method stub
+		EntityManager em = emf.createEntityManager();
+		String consulta = "from Modulo a where a.codigo = :curs";
+		Modulo mod = null;
+		try {
+			Query query = em.createQuery(consulta);
+			query.setParameter("curs", i);
+			mod = (Modulo) query.getSingleResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			em.close();
+		}
+		return mod;
+	}
+
+}
